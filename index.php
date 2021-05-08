@@ -61,7 +61,7 @@ session_start();
         </div>
     </nav>
     <div class="pagename">
-        <H1 class="welcome"> <br><br>Musify</H1>
+        <H1 class="welcome"> <br><br>Musify hello world</H1>
     </div>
     <!-- Footer -->
 <footer class="bg-dark text-center text-white">
