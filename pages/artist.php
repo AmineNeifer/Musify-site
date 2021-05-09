@@ -1,11 +1,5 @@
 <?php
 session_start();
-include_once("../PHP/connect.php");
-$bdd = connect();
-$art='artists';
-$sql = "SELECT * FROM $art";
-$answer = $bdd->query($sql) or die ($bdd->errorInfo()[2]);
-$tab = $answer->fetchall();
 ?>
 
 <!DOCTYPE html>

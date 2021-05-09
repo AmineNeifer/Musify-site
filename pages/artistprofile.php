@@ -7,9 +7,6 @@ if(!empty($_SESSION['id']) && $_REQUEST['ref']==$_SESSION['id']){
     echo "<script>window.location.href='profile.php';</script>";
     exit;  
 }
-$usr = "SELECT * FROM users WHERE username LIKE $user";
-$answer=$bdd->query($usr);
-$profile =$answer-> fetchObject();
 $x=$bdd->quote($profile->artname);
 $artist="SELECT * FROM music WHERE (artist LIKE $x) OR (feat LIKE $x)";
 $res=$bdd->query($artist);
