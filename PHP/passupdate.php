@@ -51,16 +51,12 @@
     </nav>
 <?php
 session_start();
-if(empty($_SESSION['id'])){
-    echo "<script>window.location.href='Login.php';</script>";
-    exit;  
-} 
+checkSession
 include_once("connect.php");
 $bdd = connect();
 $password = $bdd->quote(password_hash($_REQUEST['password'],PASSWORD_DEFAULT));
 $user='users';
-$ins = "UPDATE `users` SET `password` = $password WHERE `users`.`Username` = 'WaelWG'";
-$bdd->exec($ins) or die ($bdd->errorInfo()[2]);
+updatePass
 echo('<div class="m-4 alert alert-success" role="alert">
 Password Updated Successfully ! 
 </div>

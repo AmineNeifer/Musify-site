@@ -1,3 +1,8 @@
+<?php
+session_start();
+checkSession()
+?>
+
 <html>
     <head>
     <link rel="stylesheet" href="../CSS/styles.css">
@@ -96,10 +101,3 @@
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-<?php
-session_start();
-if(empty($_SESSION['id'])){
-    echo "<script>window.location.href='../pages/Login.php';</script>";
-    exit;
-}
-?>

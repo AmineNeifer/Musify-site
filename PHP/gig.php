@@ -54,17 +54,13 @@
     </nav>
 <?php
 session_start();
-if(empty($_SESSION['id'])){
-    echo "<script>window.location.href='Login.php';</script>";
-    exit;  
-} 
+checksession
 include_once("connect.php");
 $bdd = connect();
 $title = $bdd->quote($_REQUEST['title']);
 $desc = $bdd->quote($_REQUEST['description']);
 $uname = $bdd->quote($_SESSION['id']);
-$ins = "INSERT INTO `gigs` (`username`, `title`, `description`, `post`) VALUES ($uname, $title, $desc, SYSDATE())";
-$bdd->exec($ins);
+insertGig
 if($bdd->errorInfo()[2]){
     echo('<div class="m-4 alert alert-warning" role="alert">
     Error Uuploading your Gig ! 

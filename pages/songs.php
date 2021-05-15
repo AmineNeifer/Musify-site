@@ -2,29 +2,22 @@
 session_start();
 include_once("../PHP/connect.php");
 $bdd = connect();
-if(empty($_SESSION['id'])){
-    echo "<script>window.location.href='Login.php';</script>";
-    exit;
-}
-if($_SESSION['admin']==0){
-    echo "<script>window.location.href='../PHP/forbidden.php';</script>";
-    exit;
-} 
-$l="SELECT * FROM gigs WHERE post LIKE (SELECT MAX(post) FROM gigs)";
-$answerl=$bdd->query($l);
+checkSession
+checkAdmin
 $last=$answerl->fetchObject();
+
 $x=$bdd->quote($last->username);
-$prox="SELECT * FROM users WHERE Username LIKE $x";
-$answerprox=$bdd->query($prox);
+selectUser 
 $profile=$answerprox->fetchObject();
-$gig = "SELECT * FROM gigs";
-$answergig=$bdd->query($gig);
-$usrs = "SELECT * FROM users";
-$answeruser=$bdd->query($usrs);
-$music = "SELECT * FROM music";
-$answermusic=$bdd->query($music);
-$artists = "SELECT * FROM artists";
-$answerartists=$bdd->query($artists);
+
+selectAll(gig)
+
+selectAll(users)
+
+selectAll(music)
+
+selectAll(artist)
+
 if($answermusic->rowCount()==0){
     $per=-1;
 }else{

@@ -44,10 +44,7 @@
     </nav>
 <?php
 session_start();
-if(empty($_SESSION['id'])){
-    echo "<script>window.location.href='Login.php';</script>";
-    exit;  
-} 
+checkSession
 include_once("connect.php");
 $bdd = connect() ;
 $title=$bdd->quote($_REQUEST['Title']);

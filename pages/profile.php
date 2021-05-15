@@ -1,23 +1,13 @@
 <?php
 session_start();
-include_once("../PHP/connect.php");
-$bdd = connect();
-if(empty($_SESSION['id'])){
-  echo "<script>window.location.href='Login.php';</script>";
-  exit;
-}
-$user=$bdd->quote($_SESSION['id']);
-$usr = "SELECT * FROM users WHERE username LIKE $user";
-$answer=$bdd->query($usr);
-$profile =$answer-> fetchObject();
-$x=$bdd->quote($profile->artname);
-$artist="SELECT * FROM music WHERE (artist LIKE $x) OR (feat LIKE $x)";
-$res=$bdd->query($artist);
-$music =$res ->fetchAll();
-$gig = "SELECT * FROM gigs WHERE username LIKE $user";
-$answergig=$bdd->query($gig);
-$post=$answergig->fetchAll();
-
+include("../model/functions.class.php");
+$x= new model;
+$bdd=$x->connect(); 
+$x->checkSession($_SESSION['id']);
+$usr=$bdd->quote($_SESSION['id']);
+$profile=$x->selectUser($bdd,$usr)->fetchObject();
+$music= $x->selectMusic($bdd,$profile->artname)->fetchAll();
+$post= $x->selectGig($bdd,$usr)->fetchAll();
 ?>
 
 <head>
@@ -38,219 +28,12 @@ $post=$answergig->fetchAll();
 
 </head>
 <body>
-    <style>
-    .pagenamea{
-    top: 0px;
-    width: 100%;
-    height: 80%;
-    margin: 0px;
-    background-size: 100% 100%; 
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    background-image: url("<?=$profile->coverpic;?>");
-    }
-    .profilepic{
-    background-image: url("<?=$profile->profilepic;?>");
-    background-size: 100% 100%; 
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    width: 180px;
-    height: 180px;
-    display: flex;
-    justify-self: center;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 50%;
-    z-index: 99999;
-    margin-top: -60px;
-    }
-    .everpic{
-    background-image: url("<?=$profile->profilepic;?>");
-    background-size: 100% 100%; 
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    justify-self: center;
-    border-radius: 50%;
-    z-index: 99999;
-    margin-right:4px;
-    }
-    .everpic2{
-    background-image: url("<?=$profile->profilepic;?>");
-    background-size: 100% 100%; 
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-self: center;
-    border-radius: 50%;
-    z-index: 99999;
-    margin-right:4px;
-    }
-    @import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
-    .music-container {
-  background-color: #858796;
-  border-radius: 15px;
-  box-shadow: 0 5px 5px 0 #85858598;
-  display: flex;
-  padding: 20px 30px;
-  position: relative;
-  margin: 100px 0;
-  z-index: 10;
-}
-
-.img-container {
-  position: relative;
-  width: 110px;
-}
-
-
-.img-container img {
-  border-radius: 50%;
-  object-fit: cover;
-  height: 110px;
-  width: inherit;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  animation: rotate 3s linear infinite;
-
-  animation-play-state: paused;
-}
-
-.music-container.play .img-container img {
-  animation-play-state: running;
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.navigation {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
-}
-
-.action-btn {
-  background-color: rgba(255, 255, 255, 0);
-  border: 0;
-  color: #f8f9fc;
-  font-size: 20px;
-  cursor: pointer;
-  padding: 10px;
-  margin: 0 20px;
-  transition : ease 0.3s all;
-}
-.action-btn:hover {
-  background-color: rgba(255, 255, 255, 0);
-  color: #5a5c69;
-}
-
-.action-btn.action-btn-big {
-  color: #f8f9fc;
-  font-size: 30px;
-}
-.action-btn.action-btn-big:hover {
-  color: #5a5c69;
-  font-size: 30px;
-}
-.action-btn:focus {
-  outline: 0;
-}
-
-.music-info {
-  background-color: #8587967c;
-  color : #5a5c69;
-  border-radius: 15px 15px 0 0;
-  position: absolute;
-  top: 0;
-  left: 20px;
-  width: calc(100% - 40px);
-  padding: 10px 10px 10px 150px;
-  opacity: 0;
-  transform: translateY(0%);
-  transition: transform 0.3s ease-in, opacity 0.3s ease-in;
-  z-index: 0;
-}
-
-.music-container.play .music-info {
-  opacity: 1;
-  transform: translateY(-100%);
-}
-
-.music-info h4 {
-  margin: 0;
-}
-
-.progress-container {
-  background: #858796;
-  border-radius: 5px;
-  cursor: pointer;
-  margin: 10px 0;
-  height: 4px;
-  width: 100%;
-}
-
-.progress {
-  background-color: #f8f9fc;
-  border-radius: 5px;
-  height: 100%;
-  width: 0%;
-  transition: width 0.1s linear;
-}
-
-.margin{
-    margin-top:70px;
-}
-    
-
-
-    </style>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="../index.php">Musify</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-link" aria-current="page" href="artist.php">Artists</a>
-                    <a class="nav-link" href="submit.php">Submit</a>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle  active" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Profile
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item d-flex " href="profile.php"><div class="everpic"></div>My Profile</a></li>
-                            <li><a class="dropdown-item" href="editprofile.php">Profile Settings</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="../PHP/logout.php">LogOut</a></li>
-                        </ul>
-                    </li>
-                </div>
-            </div>
-        </div>
-    </nav>
+  <?php
+    include("../view/profilestyle.php");
+    style($profile->profilepic,$profile->coverpic);
+    include("../view/navbar.php");
+    NavBar($_SESSION['id']);
+  ?>
     <div class="pagenamea">
         <H1 class="welcomea"> <br><br></H1>
     </div>

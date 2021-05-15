@@ -1,14 +1,9 @@
 <?php
 session_start();
-if(empty($_SESSION['id'])){
-    echo "<script>window.location.href='Login.php';</script>";
-    exit;  
-} 
-include_once("../PHP/connect.php");
-$bdd = connect() ;
+checkSession
+connect
 $user = $bdd->quote($_SESSION['id']);
-$sql="SELECT * FROM users WHERE Username LIKE $user";
-$answer =$bdd->query($sql);
+selectUser
 $edit =$answer-> fetchObject();
 ?>
 <!DOCTYPE html>

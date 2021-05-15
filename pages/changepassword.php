@@ -1,9 +1,6 @@
 <?php
 session_start();
-if(empty($_SESSION['id'])){
-    echo "<script>window.location.href='Login.php';</script>";
-    exit;  
-} 
+checkSession
 ?>
 <!DOCTYPE html>
 <html>

@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteBase /
+RewriteRule ^([^/]*)/([^/]*)$ http://localhost/musify-site/index.php?action=$1&oxy=$2 [L]

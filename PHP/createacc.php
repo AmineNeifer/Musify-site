@@ -48,11 +48,8 @@ $phone = $bdd->quote($_REQUEST['phone']);
 $sex = $bdd->quote($_REQUEST['sex']);
 $birth = $bdd->quote($_REQUEST['birth']);
 $user='users';
-$ins = "INSERT INTO $user (`Fname`, `Lname`, `Username`, `email`, `password`, `artname`, `job`, `tel`, `sex`, `birth` , `Admin`) VALUES ($fname,$lname,$uname,$email,$password,$artname,$role,$phone,$sex,$birth , 0)";
-$sql ="SELECT * FROM $user WHERE username LIKE $uname";
-$sql2 = "SELECT * FROM $user WHERE email LIKE $email";
-$usanswer = $bdd -> query($sql);
-$emanswer = $bdd -> query($sql2);
+selectUser(uname)
+selectmail
 if($usanswer-> rowCount()>0){
     echo('<div class="m-4 alert alert-warning" role="alert">
     '.$uname.' Already Exists ! 
@@ -66,15 +63,8 @@ if($usanswer-> rowCount()>0){
   <a href="../pages/login.php" class=" m-4 btn btn-danger">Back To Login page</a>
   ') ;
 }else{
-$bdd->exec($ins) or die ($bdd->errorInfo()[2]);
-$_SESSION['id']=$uname;
-if(!empty($_SERVER['HTTP_REFERER'])){
-    $url=$_SERVER['HTTP_REFERER'];
-    echo "<script>history.go(-2);</script>";
-    }else{
-    header("location:../pages/profile.php");
-    }
-}
+createsession
+Redirect
 }
 ?>
 <!-- Footer -->

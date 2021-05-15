@@ -34,25 +34,20 @@
     </nav>
     </body>
 <?php
+include("../model/functions.class.php");
+$x= new model;
 session_start();
-include_once("connect.php");
-$bdd = connect();
+$bdd = $x->connect();
 $email = $bdd->quote($_REQUEST['email']);
 $password = $_REQUEST['password'];
 $user='users';
-$sql = "SELECT * FROM $user WHERE email LIKE $email";
-$answer = $bdd->query($sql) or die ($bdd->errorInfo()[2]);
+$answer=$x->selectEmail($bdd,$email);
 if($answer->rowCount()==1){
     $line = $answer->fetchObject();
     if(password_verify($password , $line->password)){
-        $_SESSION['id']=$line->Username;
-        $_SESSION['admin']=$line->Admin;
-        if(!empty($_SERVER['HTTP_REFERER'])){
-        $url=$_SERVER['HTTP_REFERER'];
-        echo "<script>history.go(-2);</script>";
-        }else{
-        header("location:../pages/profile.php");
-        }
+        $x->createSession($line->Username);
+        $x->createAdminsess($line->Admin);
+        $x->Redirect();
     }
     else{
         echo('<div class="m-4 alert alert-danger" role="alert">

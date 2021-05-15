@@ -1,30 +1,22 @@
 <?php
 session_start();
-include_once("../PHP/connect.php");
-$bdd = connect();
-if(empty($_SESSION['id'])){
-    echo "<script>window.location.href='Login.php';</script>";
-    exit;
-}
-if($_SESSION['admin']==0){
-    echo "<script>window.location.href='../PHP/forbidden.php';</script>";
-    exit;
-} 
-$l="SELECT * FROM gigs WHERE post LIKE (SELECT MAX(post) FROM gigs)";
-$answerl=$bdd->query($l);
+connect
+checkSession
+checkAdmin
+lastGig
 $last=$answerl->fetchObject();
 $x=$bdd->quote($last->username);
-$prox="SELECT * FROM users WHERE Username LIKE $x";
-$answerprox=$bdd->query($prox);
+selectUser
+
 $profile=$answerprox->fetchObject();
-$gig = "SELECT * FROM gigs";
-$answergig=$bdd->query($gig);
-$usrs = "SELECT * FROM users";
-$answeruser=$bdd->query($usrs);
-$music = "SELECT * FROM music";
-$answermusic=$bdd->query($music);
-$artists = "SELECT * FROM artists";
-$answerartists=$bdd->query($artists);
+selectAll(gig)
+
+selectAll(users)
+
+selectAll(music)
+
+selectAll(artist)
+
 if($answermusic->rowCount()==0){
     $per=-1;
 }else{
@@ -32,29 +24,21 @@ if($answermusic->rowCount()==0){
 }
 $precent = number_format((float)$per, 1, '.', '');
 $prec = $precent. '%';
-$pro="SELECT * FROM artists WHERE role like'Music Producer'";
-$prod=$bdd->query($pro);
+selectRole(mP)
 $producer=$prod -> rowCount();
-$sin="SELECT * FROM artists WHERE role like'Singer'";
-$sing=$bdd->query($sin);
+selectRole(singer)
 $singer=$sing -> rowCount();
-$wr="SELECT * FROM artists WHERE role like'Song Writer'";
-$write=$bdd->query($wr);
+selectRole(writer)
 $writer=$write -> rowCount();
-$pl="SELECT * FROM artists WHERE role like'Instrument Player'";
-$play=$bdd->query($pl);
+selectRole(ip)
 $player=$play -> rowCount();
-$tt="SELECT * FROM artists";
-$tot=$bdd->query($tt);
+selectAll(artists)
 $total=$tot -> rowCount();
-$ml="SELECT * FROM users WHERE sex LIKE 'Male'";
-$mal=$bdd->query($ml);
+selectSex(male)
 $male=$mal -> rowCount();
-$fml="SELECT * FROM users WHERE sex LIKE 'Female'";
-$fmal=$bdd->query($fml);
+selectSex(female)
 $female=$fmal -> rowCount();
-$otr="SELECT * FROM users WHERE sex LIKE 'Others'";
-$othr=$bdd->query($otr);
+selectSex(otr)
 $others=$othr -> rowCount();
 
 ?>

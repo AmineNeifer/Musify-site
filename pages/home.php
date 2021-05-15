@@ -1,7 +1,9 @@
-    <?php
-    function submit(){
-    echo('
-    <link rel="icon" href="../ASSETS/logo.png">
+<?php
+include("model/functions.class.php");
+function home(){
+    $x= new model;
+    $bdd=$x->connect();
+    echo('    
     <link rel="stylesheet" href="../CSS/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
@@ -15,19 +17,21 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css">
 
     <div class="pagename">
-        <H1 class="welcome"> <br><br>Submit Your Song</H1>
-    </div>
-    <nav class="container row m-3 " aria-label="breadcrumb">
-        <ol class="breadcrumb mt-3">
-          <li class="breadcrumb-item"><a href="http://localhost/Musify-site/home/">Musify</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Submit</li>
-        </ol>
-    </nav>
-    <a class="mx-3 my-3 btn btn-dark" href="http://localhost/Musify-site/upload/form" role="button">Upload Track</a>
-
-</body>
-
-</html>
+    <H1 class="welcome"> <br><br>Musify</H1>
+</div>
 ');
-    }
-    ?>
+include("view/profilestyle.php");
+
+include('view/allartists.php');
+$table="music";
+$music=$x->selectAll($bdd,$table)->fetchAll();
+include('view/showmusic.php');
+echo('<h1 class="container mt-4 text-dark">Music</h1>
+    <div class="container col-6" style="margin-top:-80px;">');
+showMusic($music);
+echo('</div>');
+musicstyle();
+allArtists($x,$bdd);
+
+}
+?>

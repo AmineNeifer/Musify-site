@@ -44,22 +44,15 @@
 <?php
 session_start();
 include_once("connect.php");
-if(empty($_SESSION['id'])){
-    echo "<script>window.location.href='../pages/Login.php';</script>";
-    exit;
-}
-  
+checksession 
+checkAdmin 
 $bdd = connect();
 $admin = $bdd->quote('admin');
 //$sql="SELECT username FROM artists";
 //$rep=$bdd->query($sql);
 //$usrs = $rep->fetchall(\PDO::FETCH_ASSOC);
 //echo($usrs);
-$del = "DELETE FROM `artists`";
-$ins = "INSERT INTO `artists` (`username`,`artname`,`role`,`profilepic`) SELECT username , artname , job , profilepic FROM users ";
-
-$fas= $bdd->exec($del);
-$answer = $bdd->exec($ins) ;
+updateArtists
 if(!$bdd->errorInfo()[2]){
 echo('<div class="m-4 alert alert-success" role="alert">
 Database Updated !

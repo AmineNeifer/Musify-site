@@ -73,20 +73,11 @@ $sex = $bdd->quote($_REQUEST['sex']);
 $birth = $bdd->quote($_REQUEST['birth']);
 $user='users';
 
-if(!file_exists("../Uploads/images/Profile/$uname")){
-    mkdir("../Uploads/images/Profile/$uname");
-}
-
-if(!file_exists("../Uploads/images/Profile/$uname/profile")){
-    mkdir("../Uploads/images/Profile/$uname/profile");
-}
+createUserFiles()
 $targetprofile = "../Uploads/images/Profile/$uname/profile/";
 $pp = $targetprofile.basename($_FILES['pp']['name']);
 $ext = strtolower(pathinfo($pp,PATHINFO_EXTENSION));
 
-if(!file_exists("../Uploads/images/Profile/$uname/cover")){
-mkdir("../Uploads/images/Profile/$uname/cover");
-}
 $targetcover = "../Uploads/images/Profile/$uname/cover/";
 $pc = $targetcover.basename($_FILES['pc']['name']);
 $ext2 = strtolower(pathinfo($pc,PATHINFO_EXTENSION));
